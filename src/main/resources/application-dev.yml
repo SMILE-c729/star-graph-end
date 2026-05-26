@@ -1,0 +1,9 @@
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+
+logging:
+  level:
+    com.stargraph: debug
+    com.stargraph.comfyui: debug
