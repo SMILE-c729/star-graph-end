@@ -22,6 +22,7 @@
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <retrofit.version>2.9.0</retrofit.version>
         <okhttp.version>4.12.0</okhttp.version>
+        <knife4j.version>4.5.0</knife4j.version>
     </properties>
     <!-- 项目依赖声明 -->
     <dependencies>
@@ -55,6 +56,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <!-- Knife4j 在线接口文档与调试 UI（Spring Boot 3 / OpenAPI3 / Jakarta 版本） -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
         </dependency>
 
         <!-- ==================== 数据库相关依赖 ==================== -->

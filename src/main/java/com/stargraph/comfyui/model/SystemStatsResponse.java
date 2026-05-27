@@ -1,5 +1,6 @@
 package com.stargraph.comfyui.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +18,14 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(name = "SystemStatsResponse", description = "ComfyUI 服务器系统信息响应体。")
 public class SystemStatsResponse {
 
     /** 系统基础信息（os、python_version 等） */
+    @Schema(description = "系统基础信息，例如 os、python_version、embedded_python 等。", example = "{\"os\":\"Windows\",\"python_version\":\"3.10.11\"}")
     private Map<String, Object> system;
 
     /** 计算设备列表，每个设备包含 name、type、vram_total、vram_free 等信息 */
+    @Schema(description = "计算设备列表，每个设备包含 name、type、vram_total、vram_free 等资源信息。")
     private List<Map<String, Object>> devices;
 }

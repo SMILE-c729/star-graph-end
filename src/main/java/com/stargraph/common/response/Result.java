@@ -1,6 +1,7 @@
 package com.stargraph.common.response;
 
 import com.stargraph.common.constant.StarGraphConstant;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -9,15 +10,19 @@ import lombok.Data;
  * 使用泛型 T 使 data 字段类型安全，通过静态工厂方法 ok/fail 快速构造响应。
  */
 @Data
+@Schema(name = "Result", description = "统一接口响应结构。")
 public class Result<T> {
 
     /** 业务状态码：200 成功，400 参数错误，500 服务器错误，502 ComfyUI 不可用 */
+    @Schema(description = "业务状态码：200 成功，400 参数错误，401 未登录或 token 无效，500 服务器错误，502 ComfyUI 不可用。", example = "200")
     private int code;
 
     /** 提示信息，成功时为 "success"，失败时为具体错误描述 */
+    @Schema(description = "提示信息；成功时通常为 success，失败时为具体错误描述。", example = "success")
     private String message;
 
     /** 响应数据，失败时为 null */
+    @Schema(description = "响应数据；不同接口的 data 类型不同，失败时通常为 null。")
     private T data;
 
     public Result() {}

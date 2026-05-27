@@ -58,3 +58,18 @@ comfyui:
 logging:
   level:
     okhttp3: DEBUG  # 启用 OkHttp 详细日志，记录 HTTP 请求/响应（生产环境建议关闭）
+
+# ==================== Knife4j / OpenAPI 在线调试配置 ====================
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
