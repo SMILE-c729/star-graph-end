@@ -1,9 +1,13 @@
+# ==================== Dev 环境配置覆盖 ====================
+# 此文件在激活 dev profile 时生效，会覆盖 application.yaml 中的同名配置
+
 spring:
   jackson:
     serialization:
-      indent-output: true
+      indent-output: true  # JSON 响应格式化输出（便于开发调试，生产环境应关闭）
 
+# 日志级别配置
 logging:
   level:
-    com.stargraph: debug
-    com.stargraph.comfyui: debug
+    com.stargraph: debug           # 项目根包日志级别：debug（显示详细调试信息）
+    com.stargraph.comfyui: debug   # ComfyUI 模块日志级别：debug

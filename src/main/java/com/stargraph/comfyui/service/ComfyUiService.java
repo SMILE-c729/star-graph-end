@@ -1,96 +1,57 @@
 package com.stargraph.comfyui.service;
 
-import com.stargraph.comfyui.client.ComfyUiApi;
 import com.stargraph.comfyui.model.PromptRequest;
+import com.stargraph.comfyui.model.PromptResponse;
 import com.stargraph.comfyui.model.QueueDeleteRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import com.stargraph.comfyui.model.QueueResponse;
+import com.stargraph.comfyui.model.SystemStatsResponse;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import org.springframework.stereotype.Service;
-import retrofit2.Call;
-import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.Map;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class ComfyUiService {
+/**
+ * ComfyUI HTTP 业务服务接口。
+ * 统一定义后端可调用的 ComfyUI 能力，Controller 不直接依赖 Retrofit API。
+ */
+public interface ComfyUiService {
 
-    private final ComfyUiApi comfyUiApi;
+    /** 获取历史记录列表。 */
+    Map<String, Object> getHistory(String maxItems) throws IOException;
 
-    public Map<String, Object> getHistory(String maxItems) throws IOException {
-        return executeCall(comfyUiApi.getHistory(maxItems));
-    }
+    /** 根据 prompt_id 获取单条历史记录。 */
+    Map<String, Object> getHistoryById(String promptId) throws IOException;
 
-    public Map<String, Object> getHistoryById(String promptId) throws IOException {
-        return executeCall(comfyUiApi.getHistoryById(promptId));
-    }
+    /** 预览图片，返回原始 ResponseBody，调用方负责关闭流。 */
+    ResponseBody previewImage(String filename, String type, String subfolder) throws IOException;
 
-    public ResponseBody previewImage(String filename, String type, String subfolder) throws IOException {
-        Response<ResponseBody> response = comfyUiApi.previewImage(filename, type, subfolder).execute();
-        if (response.isSuccessful() && response.body() != null) {
-            return response.body();
-        }
-        throw new IOException("预览图片失败: HTTP " + response.code());
-    }
+    /** 获取 ComfyUI 服务器系统信息。 */
+    SystemStatsResponse getSystemStats() throws IOException;
 
-    public Map<String, Object> getSystemStats() throws IOException {
-        return executeCall(comfyUiApi.getSystemStats());
-    }
+    /** 获取指定节点的配置信息。 */
+    Map<String, Object> getObjectInfo(String nodeName) throws IOException;
 
-    public Map<String, Object> getObjectInfo(String nodeName) throws IOException {
-        return executeCall(comfyUiApi.getObjectInfo(nodeName));
-    }
+    /** 取消当前正在执行的任务。 */
+    void interrupt() throws IOException;
 
-    public void interrupt() throws IOException {
-        executeVoid(comfyUiApi.interrupt());
-    }
+    /** 获取当前任务队列状态。 */
+    QueueResponse getQueue() throws IOException;
 
-    public Map<String, Object> getQueue() throws IOException {
-        return executeCall(comfyUiApi.getQueue());
-    }
+    /** 从等待队列中删除指定任务。 */
+    void deleteFromQueue(QueueDeleteRequest request) throws IOException;
 
-    public void deleteFromQueue(QueueDeleteRequest request) throws IOException {
-        executeVoid(comfyUiApi.deleteFromQueue(request));
-    }
+    /** 获取当前提示词配置信息。 */
+    Map<String, Object> getPrompt() throws IOException;
 
-    public Map<String, Object> getPrompt() throws IOException {
-        return executeCall(comfyUiApi.getPrompt());
-    }
+    /** 提交工作流任务到 ComfyUI。 */
+    PromptResponse submitPrompt(PromptRequest request) throws IOException;
 
-    public Map<String, Object> submitPrompt(PromptRequest request) throws IOException {
-        return executeCall(comfyUiApi.submitPrompt(request));
-    }
+    /** 上传图片到 ComfyUI。 */
+    Map<String, Object> uploadImage(MultipartBody.Part image) throws IOException;
 
-    public Map<String, Object> uploadImage(MultipartBody.Part image) throws IOException {
-        return executeCall(comfyUiApi.uploadImage(image));
-    }
-
-    public Map<String, Object> uploadMask(MultipartBody.Part image, RequestBody type,
-                                           RequestBody subfolder, RequestBody originalRef) throws IOException {
-        return executeCall(comfyUiApi.uploadMask(image, type, subfolder, originalRef));
-    }
-
-    private <T> T executeCall(Call<T> call) throws IOException {
-        Response<T> response = call.execute();
-        if (response.isSuccessful() && response.body() != null) {
-            return response.body();
-        }
-        String errorBody = response.errorBody() != null ? response.errorBody().string() : "";
-        log.error("ComfyUI 请求失败: HTTP {}, URL: {}, Error: {}", response.code(), call.request().url(), errorBody);
-        throw new IOException("ComfyUI 请求失败: HTTP " + response.code() + " - " + errorBody);
-    }
-
-    private void executeVoid(Call<Void> call) throws IOException {
-        Response<Void> response = call.execute();
-        if (!response.isSuccessful()) {
-            String errorBody = response.errorBody() != null ? response.errorBody().string() : "";
-            log.error("ComfyUI 请求失败: HTTP {}, URL: {}, Error: {}", response.code(), call.request().url(), errorBody);
-            throw new IOException("ComfyUI 请求失败: HTTP " + response.code() + " - " + errorBody);
-        }
-    }
+    /** 上传蒙版图片到 ComfyUI。 */
+    Map<String, Object> uploadMask(MultipartBody.Part image, RequestBody type,
+                                   RequestBody subfolder, RequestBody originalRef) throws IOException;
 }
