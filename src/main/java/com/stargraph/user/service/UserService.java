@@ -3,7 +3,13 @@ package com.stargraph.user.service;
 import com.stargraph.user.dto.LoginRequest;
 import com.stargraph.user.dto.LoginResponse;
 import com.stargraph.user.dto.RegisterRequest;
+import com.stargraph.user.dto.RegisterResponse;
 import com.stargraph.user.dto.SendCodeResponse;
+import com.stargraph.user.dto.UserProfileResponse;
+import com.stargraph.user.dto.UpdateProfileRequest;
+import com.stargraph.user.dto.ChangePasswordRequest;
+import com.stargraph.user.dto.AvatarUploadResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户账号业务服务接口。
@@ -24,7 +30,7 @@ public interface UserService {
      *
      * @param request 注册请求
      */
-    void register(RegisterRequest request);
+    RegisterResponse register(RegisterRequest request);
 
     /**
      * 用户登录。
@@ -33,4 +39,24 @@ public interface UserService {
      * @return 登录后的用户摘要和令牌
      */
     LoginResponse login(LoginRequest request);
+
+    /**
+     * 获取当前登录用户资料。
+     */
+    UserProfileResponse getProfile();
+
+    /**
+     * 修改当前登录用户资料。
+     */
+    UserProfileResponse updateProfile(UpdateProfileRequest request);
+
+    /**
+     * 修改当前登录用户密码。
+     */
+    void changePassword(ChangePasswordRequest request);
+
+    /**
+     * 上传并保存当前登录用户头像。
+     */
+    AvatarUploadResponse uploadAvatar(MultipartFile file) throws Exception;
 }

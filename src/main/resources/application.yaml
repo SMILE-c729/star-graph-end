@@ -54,6 +54,14 @@ comfyui:
   ws-url: ws://localhost:8000      # ComfyUI WebSocket 基础地址，程序会自动追加 /ws?clientId=...
   client-id: star-graph            # HTTP 提交任务和 WebSocket 连接共用的客户端标识
 
+# ==================== MinIO 对象存储配置 ====================
+minio:
+  endpoint: http://127.0.0.1:9000        # MinIO API 地址
+  access-key: minioadmin                 # MinIO 访问账号
+  secret-key: minioadmin                 # MinIO 访问密码
+  bucket: test-bucket                    # 已创建并设置为公共访问的桶
+  public-base-url: http://127.0.0.1:9000/test-bucket # 公共桶访问地址前缀
+
 # ==================== 日志配置 ====================
 logging:
   level:

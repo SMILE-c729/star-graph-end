@@ -23,6 +23,7 @@
         <retrofit.version>2.9.0</retrofit.version>
         <okhttp.version>4.12.0</okhttp.version>
         <knife4j.version>4.5.0</knife4j.version>
+        <minio.version>8.6.0</minio.version>
     </properties>
     <!-- 项目依赖声明 -->
     <dependencies>
@@ -132,6 +133,13 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.11</version>
+        </dependency>
+
+        <!-- MinIO Java SDK：用于用户头像上传到对象存储 -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
         </dependency>
 
         <!-- ==================== 测试依赖 ==================== -->

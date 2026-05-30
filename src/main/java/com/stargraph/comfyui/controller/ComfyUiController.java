@@ -53,10 +53,13 @@ import java.util.Map;
 @Tag(name = "ComfyUI接口", description = "ComfyUI 历史记录、任务提交、队列、图片预览、图片上传等代理接口。")
 @SecurityRequirement(name = "JWT")
 public class ComfyUiController {
-
+    // ComfyUI 服务
     private final ComfyUiService comfyUiService;
+    // ComfyUI 配置属性
     private final ComfyUiProperties comfyUiProperties;
+    // ComfyUI 消息处理器
     private final ComfyuiMessageHandler comfyuiMessageHandler;
+    // MultipartBody 工厂
     private final MultipartBodyFactory multipartBodyFactory;
 
     /** 获取历史记录列表 */

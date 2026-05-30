@@ -4,8 +4,13 @@ import com.stargraph.common.response.Result;
 import com.stargraph.user.dto.LoginRequest;
 import com.stargraph.user.dto.LoginResponse;
 import com.stargraph.user.dto.RegisterRequest;
+import com.stargraph.user.dto.RegisterResponse;
 import com.stargraph.user.dto.SendCodeRequest;
 import com.stargraph.user.dto.SendCodeResponse;
+import com.stargraph.user.dto.UserProfileResponse;
+import com.stargraph.user.dto.UpdateProfileRequest;
+import com.stargraph.user.dto.ChangePasswordRequest;
+import com.stargraph.user.dto.AvatarUploadResponse;
 import com.stargraph.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,9 +21,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户账号控制器。
@@ -78,9 +87,8 @@ public class UserController {
                     @ApiResponse(responseCode = "400", description = "参数校验失败、验证码错误、手机号已注册或用户名已存在", content = @Content(schema = @Schema(implementation = Result.class)))
             }
     )
-    public Result<Void> register(@Valid @RequestBody RegisterRequest request) {
-        userService.register(request);
-        return Result.ok("注册成功", null);
+    public Result<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return Result.ok("注册成功", userService.register(request));
     }
 
     /** 用户登录并返回 JWT。 */
@@ -112,5 +120,34 @@ public class UserController {
     )
     public Result<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return Result.ok(userService.login(request));
+    }
+
+    /** 获取当前登录用户资料。 */
+    @GetMapping("/profile")
+    @Operation(summary = "获取当前用户资料", description = "根据当前登录 token 返回用户资料和页面展示名称。")
+    public Result<UserProfileResponse> getProfile() {
+        return Result.ok(userService.getProfile());
+    }
+
+    /** 修改当前登录用户资料。 */
+    @PutMapping("/profile")
+    @Operation(summary = "修改当前用户资料", description = "支持修改用户名、邮箱、昵称、性别和头像地址。")
+    public Result<UserProfileResponse> updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
+        return Result.ok("资料修改成功", userService.updateProfile(request));
+    }
+
+    /** 修改当前登录用户密码。 */
+    @PutMapping("/password")
+    @Operation(summary = "修改当前用户密码", description = "校验旧密码后更新为新密码。")
+    public Result<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        userService.changePassword(request);
+        return Result.ok("密码修改成功", null);
+    }
+
+    /** 上传当前登录用户头像。 */
+    @PostMapping("/avatar")
+    @Operation(summary = "上传当前用户头像", description = "上传图片到 MinIO 公共桶，并保存头像公共访问地址。")
+    public Result<AvatarUploadResponse> uploadAvatar(@RequestParam("file") MultipartFile file) throws Exception {
+        return Result.ok("头像上传成功", userService.uploadAvatar(file));
     }
 }

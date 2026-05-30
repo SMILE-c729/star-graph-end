@@ -7,7 +7,7 @@ import java.time.Duration;
  * 只收敛跨层复用、具备明确业务含义的常量；接口路径、请求参数等局部字符串保留在使用处。
  */
 public interface StarGraphConstant {
-
+    // 响应码
     interface ResponseCode {
         int SUCCESS = 200;
         int BAD_REQUEST = 400;
@@ -16,13 +16,14 @@ public interface StarGraphConstant {
         int BAD_GATEWAY = 502;
     }
 
+    // 响应消息
     interface ErrorMessage {
         interface Common {
             String VALIDATION_FAILED = "参数校验失败";
             String COMFYUI_UNAVAILABLE_PREFIX = "ComfyUI 服务不可用: ";
             String INTERNAL_ERROR_PREFIX = "系统内部错误: ";
         }
-
+        // 用户相关
         interface User {
             String MOBILE_REGISTERED = "该手机号已注册，请直接登录";
             String USERNAME_EXISTS = "用户名已存在，请更换用户名";
@@ -35,7 +36,7 @@ public interface StarGraphConstant {
             String ACCOUNT_LOCKED = "账号已锁定，请联系管理员";
             String ACCOUNT_DISABLED = "账号已失效";
         }
-
+        // 令牌相关
         interface Token {
             String BLANK = "令牌不能为空";
             String INVALID = "令牌无效";
@@ -44,6 +45,7 @@ public interface StarGraphConstant {
             String MISSING_USER_ID = "令牌缺少用户ID";
             String MISSING_USERNAME = "令牌缺少用户名";
         }
+        // ComfyUI 相关
 
         interface ComfyUi {
             String GET_HISTORY = "获取 ComfyUI 历史记录失败";
@@ -60,38 +62,39 @@ public interface StarGraphConstant {
             String UPLOAD_MASK = "上传 ComfyUI 蒙版失败";
         }
     }
-
+    // 用户状态
     interface UserStatus {
         int NORMAL = 0;
         int TIMEOUT_LOCKED = 1;
         int LOCKED = 2;
         int DISABLED = 9;
     }
-
+    // 逻辑删除
     interface LogicDelete {
         int NOT_DELETED = 0;
         int DELETED = 1;
     }
-
+    // 用户默认值
     interface UserDefault {
         int VIP_LEVEL = 0;
         int UNKNOWN_GENDER = 0;
+        // 默认头像
         String AVATAR = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80";
     }
-
+    // 验证码
     interface VerificationCode {
         int TTL_SECONDS = 60;
         int RANDOM_BOUND = 1_000_000;
         String SIX_DIGIT_FORMAT = "%06d";
         String REDIS_KEY_PREFIX = "stargraph:register:code:";
     }
-
+    // JWT 配置
     interface JwtConfig {
         String SECRET = "star-graph-user-token-secret";
         long TOKEN_TTL_HOURS = 72;
         Duration TOKEN_TTL = Duration.ofHours(TOKEN_TTL_HOURS);
     }
-
+    // JWT 声明
     interface JwtClaim {
         String ID = "id";
         String USERNAME = "username";
